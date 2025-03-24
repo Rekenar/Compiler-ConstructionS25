@@ -1,0 +1,23 @@
+program Test {
+    // Keywords and identifiers
+    break class else final if new print program read return void while
+    identifier123 7890 'a' '\n'
+
+    // Operators and punctuation
+    + ++ - -- * ** / % == != < <= > >= && || ( ) [ ] { } = ; , .
+
+    // A comment line – whitespace and comments should be skipped:
+    // This comment must be ignored by the scanner.
+
+    // Invalid tokens (should result in error tokens with kind = none)
+    @
+    !
+    _
+    &
+    |
+
+
+    /* wiadj
+
+    iwjd */
+}

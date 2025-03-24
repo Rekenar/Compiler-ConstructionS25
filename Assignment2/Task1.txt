@@ -1,0 +1,15 @@
+(a) 
+Define a regular grammar for (arbitrary large) hexadecimal numbers starting with the prefix 0x. 
+You may use hexdigit as terminal symbol.
+
+S → 0A
+
+A → xB
+
+B → hexdigit B ∣ hexdigit
+
+
+(b) 
+Give an equivalent grammar consisting of a single, non-recursive production in EBNF.
+
+HexNumber = "0x" hexdigit { hexdigit }

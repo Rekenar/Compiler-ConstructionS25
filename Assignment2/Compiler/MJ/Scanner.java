@@ -51,7 +51,8 @@ public class Scanner {
 		return_   = 38,
 		void_     = 39,
 		while_    = 40,
-		eof       = 41; // end-of-file token
+		eof       = 41, // end-of-file token
+		power	  = 42;
 
 	private static final String key[] = { // sorted list of keywords
 		"break", "class", "else", "final", "if", "new", "print",
@@ -133,14 +134,39 @@ public class Scanner {
 				else t.kind = minus;
 				break;
 			case '*':
-				t.kind = times; nextCh();
+				nextCh();
+				if (ch == '*') {t.kind = power; nextCh();}
+				else t.kind = times;
 				break;
 			case '/':
 				nextCh();
 				if (ch == '/') {
-					do nextCh(); while (ch != eol && ch != eofCh);
+					do {
+						nextCh();
+					} while (ch != eol && ch != eofCh);
 					t = next();
-				} else t.kind = slash;
+				} else if (ch == '*') {
+					nextCh();
+					boolean endFound = false;
+					while (ch != eofCh) {
+						if (ch == '*') {
+							nextCh();
+							if (ch == '/') {
+								nextCh(); // skip '/'
+								endFound = true;
+								break;
+							}
+						} else {
+							nextCh();
+						}
+					}
+					if (!endFound) {
+						error("block comment not terminated");
+					}
+					t = next();
+				} else {
+					t.kind = slash;
+				}
 				break;
 			case '%':
 				t.kind = rem; nextCh();

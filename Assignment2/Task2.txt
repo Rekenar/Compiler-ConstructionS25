@@ -1,0 +1,28 @@
+(a) 
+Define a regular expression describing block comments that start with “/*” and end with “*/” 
+(/*...*/). You may assume  that block comments are not nested (i.e. /*.../*...*/...*/ does 
+not occur in input). You may use the terminal symbol char for any character that is neither ‘/’ nor 
+‘*’.
+
+/\* ([^*] | \*(?!/) )*  \*/
+
+
+The asterisks need to be escaped so that they are seen as a character and not a command using the backslash "\"
+
+
+/\*  For beginning of comment "/*".
+
+[^*] For any character that is not an asterisk "*"
+
+| or
+
+\*(?!/) For any asterisk that is not followed by an "/"
+
+\*/  For ending of comment "*/"
+
+
+
+(b) Can nested block comments be described by a regular expression? Explain your answer.
+
+
+Since regular expressions are an alternative notation for regular grammars and regular grammars cannot handle nested structures, they cannot describe nested block comments.
