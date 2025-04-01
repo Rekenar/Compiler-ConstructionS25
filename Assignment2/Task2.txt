@@ -16,7 +16,7 @@ The asterisks need to be escaped so that they are seen as a character and not a 
 
 | or
 
-\*(?!/) For any asterisk that is not followed by an "/"
+\*(?!/) For any asterisk that is not followed by an "/" Wikipedia
 
 \*/  For ending of comment "*/"
 

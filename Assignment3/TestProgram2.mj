@@ -1,0 +1,12 @@
+program ArrayTest
+int[] arr;
+final char[] nl = 'n';
+class Container {
+    int value;
+    int[] data;
+}
+{
+}
+
+
+//Type = ident [ "[" "]" ].

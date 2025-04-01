@@ -12,4 +12,4 @@ B → hexdigit B ∣ hexdigit
 (b) 
 Give an equivalent grammar consisting of a single, non-recursive production in EBNF.
 
-HexNumber = "0x" hexdigit { hexdigit }
+HexNumber = "0" "x" hexdigit { hexdigit }

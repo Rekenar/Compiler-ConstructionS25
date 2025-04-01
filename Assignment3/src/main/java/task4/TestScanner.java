@@ -1,4 +1,4 @@
-package MJ;
+package task4;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ public class TestScanner {
             try (BufferedReader br = new BufferedReader(new FileReader(args[1]))) {
                 String line;
                 while ((line = br.readLine()) != null) {
+                    // Token codes are assumed to be separated by whitespace.
                     String[] tokens = line.split("\\s+");
                     for (String tok : tokens) {
                         if (!tok.isEmpty()) {
@@ -37,6 +38,7 @@ public class TestScanner {
             FileReader fr = new FileReader(args[0]);
             Scanner.init(fr);
             Token t;
+            // The eof token is coded as 41 (or Scanner.eof).
             do {
                 t = Scanner.next();
                 actualTokens.add(t.kind);
@@ -45,7 +47,7 @@ public class TestScanner {
                     System.out.print(" (\"" + t.val + "\")");
                 }
                 System.out.println();
-            } while (t.kind != 41);
+            } while (t.kind != 41); // or you can use: while(t.kind != Scanner.eof);
             fr.close();
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + args[0]);

@@ -1,0 +1,11 @@
+program ClassError
+class {
+    int x;
+    int y;
+}
+{
+}
+
+
+
+//ClassDecl = “class” ident “{“  {Type ident {“,” ident} “;” } “}” .

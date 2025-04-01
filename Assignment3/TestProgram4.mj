@@ -1,0 +1,7 @@
+program VarError
+int a b;
+{
+}
+
+
+//VarDecl = Type ident { “,” ident} “;” .

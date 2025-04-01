@@ -1,0 +1,7 @@
+program ConstError
+final int max = ;
+int a;
+{
+}
+
+//ConstDecl = “final” Type ident “=” Literal “;” .

@@ -1,0 +1,15 @@
+program TestProgram1
+final int max = 100;
+int a, b, c;
+class MyClass {
+    int x, y;
+    boolean flag;
+}
+{
+}
+
+//ConstDecl = “final” Type ident “=” Literal “;” .
+
+//VarDecl = Type ident { “,” ident} “;” .
+
+//ClassDecl = “class” ident “{“  {Type ident {“,” ident} “;” } “}” .
