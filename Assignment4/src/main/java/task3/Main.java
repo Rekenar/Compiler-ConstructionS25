@@ -14,9 +14,9 @@ public class Main {
         for (String fileName : args) {
             System.out.println("Parsing file: " + fileName);
             try {
-                String content = new String(Files.readAllBytes(Paths.get(fileName)));
-                Lexer lexer = new Lexer(content);
-                Parser parser = new Parser(lexer);
+                String content = new String(Files.readAllBytes(Paths.get("src/main/java/task3/files/" + fileName)));
+                Scanner scanner = new Scanner(content);
+                Parser parser = new Parser(scanner);
                 parser.parse();
                 System.out.println("Parsing successful: " + fileName);
             } catch (IOException e) {

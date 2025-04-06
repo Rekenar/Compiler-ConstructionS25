@@ -16,8 +16,8 @@ public class Main {
             System.out.println("Parsing file: " + fileName);
             try {
                 String content = new String(Files.readAllBytes(Paths.get("src/main/java/task4/files/" + fileName)));
-                Lexer lexer = new Lexer(content, fileName);
-                Parser parser = new Parser(lexer, fileName);
+                Scanner scanner = new Scanner(content, fileName);
+                Parser parser = new Parser(scanner, fileName);
                 parser.parse();
                 List<String> errors = parser.getErrors();
                 if (errors.isEmpty()) {

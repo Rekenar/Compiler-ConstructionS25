@@ -1,16 +1,14 @@
-package task4;
+package task3;
 
-public class Lexer {
+public class Scanner {
     String input;
     int pos;
     int length;
-    String filename;
 
-    Lexer(String input, String fileName) {
+    Scanner(String input) {
         this.input = input;
         this.pos = 0;
         this.length = input.length();
-        this.filename = fileName;
     }
 
     // Returns the next token from the input.
@@ -53,7 +51,6 @@ public class Lexer {
                 pos++; // Skip the closing quote.
                 return new Token(Token.TokenType.STRING, sb.toString(), start - 1);
             } else {
-                //System.err.println("[" + filename + "]" + " Lexical error: Unterminated string at position " + start);
                 return new Token(Token.TokenType.UNKNOWN, sb.toString(), start - 1);
             }
         } else if (Character.isDigit(current) || current == '-') {
@@ -69,7 +66,6 @@ public class Lexer {
             }
             return new Token(Token.TokenType.NUMBER, sb.toString(), start);
         } else {
-            //System.err.println("[" + filename + "]" + " Lexical error: Unknown character '" + current + "' at position " + pos);
             pos++;
             return new Token(Token.TokenType.UNKNOWN, Character.toString(current), pos - 1);
         }

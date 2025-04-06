@@ -1,14 +1,16 @@
-package task3;
+package task4;
 
-public class Lexer {
+public class Scanner {
     String input;
     int pos;
     int length;
+    String filename;
 
-    Lexer(String input) {
+    Scanner(String input, String fileName) {
         this.input = input;
         this.pos = 0;
         this.length = input.length();
+        this.filename = fileName;
     }
 
     // Returns the next token from the input.
@@ -40,7 +42,7 @@ public class Lexer {
             return new Token(Token.TokenType.COLON, ":", pos - 1);
         } else if (current == '"') {
             // Parse string literal.
-            pos++; // Skip the opening quote.
+            pos++;
             int start = pos;
             StringBuilder sb = new StringBuilder();
             while (pos < length && input.charAt(pos) != '"') {
@@ -48,10 +50,9 @@ public class Lexer {
                 pos++;
             }
             if (pos < length && input.charAt(pos) == '"') {
-                pos++; // Skip the closing quote.
+                pos++;
                 return new Token(Token.TokenType.STRING, sb.toString(), start - 1);
             } else {
-                System.err.println("Lexical error: Unterminated string at position " + start);
                 return new Token(Token.TokenType.UNKNOWN, sb.toString(), start - 1);
             }
         } else if (Character.isDigit(current) || current == '-') {
@@ -67,13 +68,11 @@ public class Lexer {
             }
             return new Token(Token.TokenType.NUMBER, sb.toString(), start);
         } else {
-            System.err.println("Lexical error: Unknown character '" + current + "' at position " + pos);
             pos++;
             return new Token(Token.TokenType.UNKNOWN, Character.toString(current), pos - 1);
         }
     }
 
-    // Skip any whitespace.
     void skipWhitespace() {
         while (pos < length && Character.isWhitespace(input.charAt(pos))) {
             pos++;

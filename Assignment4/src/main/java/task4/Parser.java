@@ -7,13 +7,13 @@ import java.util.BitSet;
 import java.util.List;
 
 public class Parser {
-    private Lexer lexer;
+    private Scanner scanner;
     private Token currentToken;
     private List<String> errors = new ArrayList<>();
     private String fileName;
 
-    public Parser(Lexer lexer, String fileName) {
-        this.lexer = lexer;
+    public Parser(Scanner scanner, String fileName) {
+        this.scanner = scanner;
         advance();
         this.fileName = fileName;
     }
@@ -35,9 +35,6 @@ public class Parser {
         if (!match(TokenType.LBRACE)) {
             reportError("Expected '{' at the beginning of an object.");
             synchronize(createAnchorSet(TokenType.RBRACE, TokenType.COMMA));
-            if (!match(TokenType.LBRACE)) {
-                return;
-            }
         }
         // Optional pairs.
         if (!check(TokenType.RBRACE)) {
@@ -94,9 +91,6 @@ public class Parser {
         if (!match(TokenType.LBRACKET)) {
             reportError("Expected '[' at beginning of array.");
             synchronize(createAnchorSet(TokenType.RBRACKET, TokenType.COMMA));
-            if (!match(TokenType.LBRACKET)) {
-                return;
-            }
         }
         if (!check(TokenType.RBRACKET)) {
             value();
@@ -133,7 +127,7 @@ public class Parser {
     }
 
     private void advance() {
-        currentToken = lexer.getNextToken();
+        currentToken = scanner.getNextToken();
     }
 
     // Report an error message including token position.

@@ -15,12 +15,12 @@ public class Parser {
 
     // --- Task3.Parser ---
 
-        Lexer lexer;
+        Scanner scanner;
         Token currentToken;
 
-        Parser(Lexer lexer) throws ParseException {
-            this.lexer = lexer;
-            currentToken = lexer.getNextToken();
+        Parser(Scanner scanner) throws ParseException {
+            this.scanner = scanner;
+            currentToken = scanner.getNextToken();
             if (currentToken.type == Token.TokenType.UNKNOWN) {
                 throw new ParseException("Unknown token", currentToken.position);
             }
@@ -34,7 +34,7 @@ public class Parser {
         // Compare current token with expected type and advance.
         void eat(Token.TokenType type) throws ParseException {
             if (currentToken.type == type) {
-                currentToken = lexer.getNextToken();
+                currentToken = scanner.getNextToken();
             } else {
                 error("Expected token " + type + " but found " + currentToken.type);
             }
