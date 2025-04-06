@@ -14,7 +14,7 @@ public class Parser {
 
     public Parser(Lexer lexer, String fileName) {
         this.lexer = lexer;
-        advance(); // load first token
+        advance();
         this.fileName = fileName;
     }
 

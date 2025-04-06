@@ -3,4 +3,4 @@
   "age": 30,
   "phones": ["123-4567" "987-6543"],
   "address": { "city": "New York", "zip": "10001"
-  } extra
+  }
