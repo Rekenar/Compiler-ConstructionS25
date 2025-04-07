@@ -34,7 +34,7 @@ public class Parser {
     private void parseObject() {
         if (!match(TokenType.LBRACE)) {
             reportError("Expected '{' at the beginning of an object.");
-            synchronize(createAnchorSet(TokenType.RBRACE));
+            synchronize(createAnchorSet(TokenType.STRING, TokenType.RBRACE));
         }
         // Optional pairs.
         if (!check(TokenType.RBRACE)) {

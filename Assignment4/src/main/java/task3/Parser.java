@@ -88,7 +88,7 @@ public class Parser {
     // Array = "[" [ Value { "," Value } ] "]".
     void parseArray() throws ParseException {
         match(TokenType.LBRACKET);
-        if (check(TokenType.RBRACKET)) {
+        if (!check(TokenType.RBRACKET)) {
             parseValue();
             while (check(TokenType.COMMA)) {
                 match(TokenType.COMMA);
