@@ -55,7 +55,7 @@ public class Parser {
         };
     }
 
-    // ---------------------- Task3.Parser Methods ----------------------------
+    // ---------------------- Task2.Parser Methods ----------------------------
 
     // S = A B | C .
     public void parseS(BitSet sux) {
