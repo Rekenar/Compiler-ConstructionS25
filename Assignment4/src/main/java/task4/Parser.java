@@ -1,21 +1,21 @@
 package task4;
 
 import task4.Token.TokenType;
-
 import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public class Parser {
-    private Scanner scanner;
+    private final Scanner scanner;
     private Token currentToken;
-    private List<String> errors = new ArrayList<>();
-    private String fileName;
+    private final List<String> errors = new ArrayList<>();
+    private final String fileName;
 
     public Parser(Scanner scanner, String fileName) {
         this.scanner = scanner;
-        advance();
         this.fileName = fileName;
+        advance();
     }
 
     public List<String> getErrors() {
@@ -24,96 +24,79 @@ public class Parser {
 
     // Start parsing the input as an object.
     public void parse() {
-        object();
+        parseObject();
         if (currentToken.type != TokenType.EOF) {
             reportError("Extra content after valid input.");
         }
     }
 
-    // object = "{" [ Pair { "," Pair } ] "}".
-    private void object() {
+    // parseObject = "{" [ parsePair { "," parsePair } ] "}".
+    private void parseObject() {
         if (!match(TokenType.LBRACE)) {
             reportError("Expected '{' at the beginning of an object.");
-            synchronize(createAnchorSet(TokenType.RBRACE, TokenType.COMMA));
+            synchronize(createAnchorSet(TokenType.RBRACE));
         }
         // Optional pairs.
         if (!check(TokenType.RBRACE)) {
-            pair();
-            while (match(TokenType.COMMA)) {
-                // If the next token cannot start a pair, attempt recovery.
-                if (!check(TokenType.STRING)) {
-                    reportError("Expected a string as key in pair.");
-                    synchronize(createAnchorSet(TokenType.COMMA, TokenType.RBRACE));
-                } else {
-                    pair();
-                }
-            }
+            do {
+                parsePair();
+            } while (match(TokenType.COMMA));
         }
         if (!match(TokenType.RBRACE)) {
             reportError("Expected '}' at the end of object.");
             synchronize(createAnchorSet(TokenType.RBRACE));
-            match(TokenType.RBRACE); // try to consume the anchor
+            match(TokenType.RBRACE);
         }
     }
 
-    // Pair = string ":" Value.
-    private void pair() {
+    // parsePair = string ":" parseValue.
+    private void parsePair() {
         if (!match(TokenType.STRING)) {
             reportError("Expected string as key in pair.");
-            synchronize(createAnchorSet(TokenType.COLON, TokenType.COMMA, TokenType.RBRACE));
+            synchronize(createAnchorSet(TokenType.STRING, TokenType.COLON, TokenType.COMMA, TokenType.RBRACE));
         }
         if (!match(TokenType.COLON)) {
             reportError("Expected ':' after key.");
             synchronize(createAnchorSet(TokenType.STRING, TokenType.NUMBER, TokenType.LBRACE, TokenType.LBRACKET, TokenType.COMMA, TokenType.RBRACE));
         }
-        value();
+        parseValue();
     }
 
-    // Value = string | number | Object | Array.
-    private void value() {
+    // parseValue = string | number | parseObject | parseArray.
+    private void parseValue() {
         if (check(TokenType.STRING)) {
             match(TokenType.STRING);
         } else if (check(TokenType.NUMBER)) {
             match(TokenType.NUMBER);
         } else if (check(TokenType.LBRACE)) {
-            object();
+            parseObject();
         } else if (check(TokenType.LBRACKET)) {
-            array();
+            parseArray();
         } else {
             reportError("Invalid value. Expected a string, number, object, or array.");
-            // Recover by skipping until an anchor is found.
             synchronize(createAnchorSet(TokenType.COMMA, TokenType.RBRACE, TokenType.RBRACKET));
         }
     }
 
-    // Array = "[" [ Value { "," Value } ] "]".
-    private void array() {
+    // parseArray = "[" [ parseValue { "," parseValue } ] "]".
+    private void parseArray() {
         if (!match(TokenType.LBRACKET)) {
             reportError("Expected '[' at beginning of array.");
             synchronize(createAnchorSet(TokenType.RBRACKET, TokenType.COMMA));
         }
         if (!check(TokenType.RBRACKET)) {
-            value();
-            while (match(TokenType.COMMA)) {
-                // If the next token isn’t a valid value, recover.
-                if (!check(TokenType.STRING) && !check(TokenType.NUMBER)
-                        && !check(TokenType.LBRACE) && !check(TokenType.LBRACKET)) {
-                    reportError("Expected a valid value after comma in array.");
-                    synchronize(createAnchorSet(TokenType.COMMA, TokenType.RBRACKET));
-                } else {
-                    value();
-                }
-            }
+            do {
+                parseValue();
+            } while (match(TokenType.COMMA));
         }
         if (!match(TokenType.RBRACKET)) {
             reportError("Expected ']' at the end of array.");
             synchronize(createAnchorSet(TokenType.RBRACKET));
-            match(TokenType.RBRACKET); // try to consume the anchor
+            match(TokenType.RBRACKET);
         }
     }
 
     // Helper methods for token management
-
     private boolean match(TokenType expected) {
         if (check(expected)) {
             advance();
@@ -132,32 +115,19 @@ public class Parser {
 
     // Report an error message including token position.
     private void reportError(String message) {
-        String err = "[" +fileName + "] Error at position " + currentToken.position +" : " + message;
+        String err = "[" + fileName + "] Error at position " + currentToken.position + " : " + message;
         errors.add(err);
     }
 
-    /**
-     * Synchronize (recover) by advancing tokens until one of the anchor tokens is found.
-     *
-     * @param anchors A BitSet representing tokens to synchronize on.
-     */
-    private void synchronize(BitSet anchors) {
-        while (currentToken.type != TokenType.EOF && !anchors.get(currentToken.type.ordinal())) {
+
+    private void synchronize(Set<TokenType> anchors) {
+        while (currentToken.type != TokenType.EOF && !anchors.contains(currentToken.type)) {
             advance();
         }
     }
 
-    /**
-     * Helper method to create a BitSet from a list of TokenTypes.
-     *
-     * @param tokens The tokens to add to the BitSet.
-     * @return A BitSet with bits set for each provided token.
-     */
-    private BitSet createAnchorSet(TokenType... tokens) {
-        BitSet bitset = new BitSet(TokenType.values().length);
-        for (TokenType t : tokens) {
-            bitset.set(t.ordinal());
-        }
-        return bitset;
+
+    private Set<TokenType> createAnchorSet(TokenType... tokens) {
+        return EnumSet.of(tokens[0], tokens);
     }
 }

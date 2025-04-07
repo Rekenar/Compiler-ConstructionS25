@@ -6,10 +6,8 @@ public class Parser {
 
     // --- Custom Exception for Parsing Errors ---
     static class ParseException extends Exception {
-        int position;
         ParseException(String message, int position) {
             super("Syntax error at position " + position + ": " + message);
-            this.position = position;
         }
     }
 
