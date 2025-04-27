@@ -1,6 +1,8 @@
 {
-  "name" "John",
-  "age": 30,
+  name "John",
+  "age": wakdwadjan,
   "phones": ["123-4567" "987-6543"],
-  "address": { "city": "New York", "zip": "10001"
+  "address": {
+    "city": "New York",
+    "zip": "10001"
   }

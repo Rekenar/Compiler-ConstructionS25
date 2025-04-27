@@ -55,7 +55,8 @@ public class Scanner {
             } else {
                 return new Token(Token.TokenType.UNKNOWN, sb.toString(), start - 1);
             }
-        } else if (Character.isDigit(current) || current == '-') {
+        }
+        else if (Character.isDigit(current) || current == '-') {
             int start = pos;
             StringBuilder sb = new StringBuilder();
             if (current == '-') {
