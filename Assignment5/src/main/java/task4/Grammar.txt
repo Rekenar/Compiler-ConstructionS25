@@ -1,0 +1,60 @@
+Program = { Statement }.
+Statement = ident "=" Expr ";"
+  |  "print" Expr ";" .
+Expr = Term { "+" Term | "-" Term }.
+Term = Factor { "*" Factor | "/" Factor }.
+Factor = number | ident | "(" Expr ")" | "-" Factor.
+
+
+
+
+/*---------------------------------------------------------------------------*/
+/* 1.  Program: execute all statements                                       */
+/*---------------------------------------------------------------------------*/
+Program
+  = { Statement }
+  .
+
+/*---------------------------------------------------------------------------*/
+/* 2.  A single statement: assignment or print                                */
+/*---------------------------------------------------------------------------*/
+Statement
+(. int val; String name; .)
+  = ident<↑name> "=" Expr<↑val> ";"
+      (. varMap.put(name, val); .)
+  | "print" Expr<↑val> ";"
+      (. System.out.println(val); .)
+  .
+
+/*---------------------------------------------------------------------------*/
+/* 3.  Expressions: plus/minus                                                 */
+/*---------------------------------------------------------------------------*/
+Expr<↑val>
+    (. int val; .)
+  = Term<↑val>
+    { "+" Term<↑v>  (. val = val + v; .)
+    |  "-" Term<↑v>  (. val = val - v; .)
+    }
+  .
+
+/*---------------------------------------------------------------------------*/
+/* 4.  Terms: times/divide                                                    */
+/*---------------------------------------------------------------------------*/
+Term<↑val>
+(. int val; .)
+  = Factor<↑val>
+    { "*" Factor<↑v>  (. val = val * v; .)
+    |  "/" Factor<↑v>  (. val = val / v; .)
+    }
+  .
+
+/*---------------------------------------------------------------------------*/
+/* 5.  Factors: literals, variables, grouping, negation                       */
+/*---------------------------------------------------------------------------*/
+Factor<↑val>
+(. int val; .)
+  = number<↑text>       (. val = Integer.parseInt(text); .)
+  | ident<↑name>       (. val = varMap.getOrDefault(name, 0); .)
+  | "(" Expr<↑val> ")"
+  | "-" Factor<↑v>     (. val = -v; .)
+  .

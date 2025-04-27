@@ -32,7 +32,7 @@ public class Parser {
         }
 
         // Compare current token with expected type and advance.
-        void eat(Token.TokenType type) throws ParseException {
+        void match(Token.TokenType type) throws ParseException {
             if (currentToken.type == type) {
                 currentToken = scanner.getNextToken();
             } else {
@@ -43,17 +43,17 @@ public class Parser {
         // Object = "{" [ Pair { "," Pair } ] "}".
         void parseObject() throws ParseException {
             if (currentToken.type == Token.TokenType.LBRACE) {
-                eat(Token.TokenType.LBRACE);
+                match(Token.TokenType.LBRACE);
                 // Optional list of pairs.
                 if (currentToken.type == Token.TokenType.STRING) {
                     parsePair();
                     while (currentToken.type == Token.TokenType.COMMA) {
-                        eat(Token.TokenType.COMMA);
+                        match(Token.TokenType.COMMA);
                         parsePair();
                     }
                 }
                 if (currentToken.type == Token.TokenType.RBRACE) {
-                    eat(Token.TokenType.RBRACE);
+                    match(Token.TokenType.RBRACE);
                 } else {
                     error("Expected '}' at end of object");
                 }
@@ -65,12 +65,12 @@ public class Parser {
         // Pair = string ":" Value.
         void parsePair() throws ParseException {
             if (currentToken.type == Token.TokenType.STRING) {
-                eat(Token.TokenType.STRING);
+                match(Token.TokenType.STRING);
             } else {
                 error("Expected string as key in pair");
             }
             if (currentToken.type == Token.TokenType.COLON) {
-                eat(Token.TokenType.COLON);
+                match(Token.TokenType.COLON);
             } else {
                 error("Expected ':' after key in pair");
             }
@@ -81,10 +81,10 @@ public class Parser {
         void parseValue() throws ParseException {
             switch (currentToken.type) {
                 case STRING:
-                    eat(Token.TokenType.STRING);
+                    match(Token.TokenType.STRING);
                     break;
                 case NUMBER:
-                    eat(Token.TokenType.NUMBER);
+                    match(Token.TokenType.NUMBER);
                     break;
                 case LBRACE:
                     parseObject();
@@ -100,16 +100,16 @@ public class Parser {
         // Array = "[" [ Value { "," Value } ] "]".
         void parseArray() throws ParseException {
             if (currentToken.type == Token.TokenType.LBRACKET) {
-                eat(Token.TokenType.LBRACKET);
+                match(Token.TokenType.LBRACKET);
                 if (currentToken.type != Token.TokenType.RBRACKET) {
                     parseValue();
                     while (currentToken.type == Token.TokenType.COMMA) {
-                        eat(Token.TokenType.COMMA);
+                        match(Token.TokenType.COMMA);
                         parseValue();
                     }
                 }
                 if (currentToken.type == Token.TokenType.RBRACKET) {
-                    eat(Token.TokenType.RBRACKET);
+                    match(Token.TokenType.RBRACKET);
                 } else {
                     error("Expected ']' at end of array");
                 }

@@ -1,0 +1,32 @@
+(a) What does this grammar compute?
+
+D <↑v>: This rule defines a single hexadecimal digit.
+•  If the input is a digit (0-9), its value (v) is the numerical value of that digit (e.g., '7' becomes 7).
+•  If the input is a letter (A-F), its value (v) is determined by castint, where 'A' is 10, 'B' is 11, ..., up to 'F' which is 15.
+
+N <↑b>: This rule defines a sequence of one or more hexadecimal digits (D)
+•  It initializes an accumulator b to 0.
+•  It processes the first required D and adds its value v to b.
+•  It then processes zero or more subsequent Ds adding each v to the accumulator b.
+• The final accumulated value b is the output attribute.
+
+H <↑s>: This is the start rule.
+• It expects the input to start with the literal prefix "0x".
+• It then processes the hexadecimal digit sequence N, obtaining its accumulated value b.
+• The semantic action (. s = b; .) assigns the value computed by N to the output attribute s.
+
+
+This grammar parses a hexadecimal number starting with "0x", followed by digits and/or letters (A to F).
+•	It converts digits (0–9) and letters (A–F) into their integer values.
+•	Then it sums up the values of all the digits/letters sequentially.
+
+Important:
+•	digit.value gives the numeric value of a digit (0-9).
+•	letter.value is mapped using castInt(), where:
+o	'A' → 10
+o	'B' → 11
+o	etc.
+Thus, the grammar computes the sum of the digits and letters’ integer values after "0x".
+
+Example: 0x2A3
+Sum = 2 + 10 + 3 = 15

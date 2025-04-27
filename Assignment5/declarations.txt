@@ -1,0 +1,5 @@
+boolean first;
+char second;
+double third;
+int fourth;
+boolean fifth, six;

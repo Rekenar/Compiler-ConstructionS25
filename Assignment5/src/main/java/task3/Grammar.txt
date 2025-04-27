@@ -1,0 +1,56 @@
+
+VarDeclList = VarDecl {VarDecl} .
+VarDecl = Type ident { “,” ident } “;” .
+Type = “boolean” | “char” | “int” | “double” .
+
+
+
+
+/*---------------------------------------------------------------------------*/
+/* 1. List of VarDecls: start offset at 0, accumulate sizes                  */
+/*---------------------------------------------------------------------------*/
+VarDeclList<↑total>
+  (. offset = 0; .)                    /* initialize offset */
+  = VarDecl<↓offset, ↑size>
+    {
+      (. offset += size; .)            /* after each decl, bump offset */
+      VarDecl<↓offset, ↑size>
+    }
+    (. total = offset; .)              /* at end, synthesized total */
+  .
+
+/*---------------------------------------------------------------------------*/
+/* 2. One declaration: get type, count id’s, then print & size               */
+/*---------------------------------------------------------------------------*/
+VarDecl<↓offset, ↑size>
+  (. String typeName; int unitSize, int count; .)
+  = Type    <↑typeName, ↑unitSize>
+    IdentList<↑count>
+    ";"
+  (.
+     size = unitSize * count;         /* compute total bytes for this decl */
+     /* print each identifier’s OFFSET, SIZE, TYPE */
+     for(int k = 0; k < count; k++)
+       System.out.printf("%6d %6d %s%n",
+           offset + k*unitSize, unitSize, typeName);
+  .)
+  .
+
+/*---------------------------------------------------------------------------*/
+/* 3. Comma-separated identifiers: just count them                           */
+/*---------------------------------------------------------------------------*/
+IdentList<↑count>
+  (. count = 1; .)                     /* one ident parsed so far */
+  = ident
+    { "," ident (. count++; .) }      /* increment for each “,” */
+  .
+
+/*---------------------------------------------------------------------------*/
+/* 4. Base types with their sizes                                            */
+/*---------------------------------------------------------------------------*/
+Type<↑typeName, ↑unitSize>
+  = "boolean" (. typeName = "boolean";  unitSize = 1; .)
+  | "char"    (. typeName = "char";     unitSize = 2; .)
+  | "int"     (. typeName = "int";      unitSize = 4; .)
+  | "double"  (. typeName = "double";   unitSize = 8; .)
+  .

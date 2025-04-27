@@ -136,23 +136,14 @@ public class Parser {
         errors.add(err);
     }
 
-    /**
-     * Synchronize (recover) by advancing tokens until one of the anchor tokens is found.
-     *
-     * @param anchors A BitSet representing tokens to synchronize on.
-     */
+
     private void synchronize(BitSet anchors) {
         while (currentToken.type != TokenType.EOF && !anchors.get(currentToken.type.ordinal())) {
             advance();
         }
     }
 
-    /**
-     * Helper method to create a BitSet from a list of TokenTypes.
-     *
-     * @param tokens The tokens to add to the BitSet.
-     * @return A BitSet with bits set for each provided token.
-     */
+
     private BitSet createAnchorSet(TokenType... tokens) {
         BitSet bitset = new BitSet(TokenType.values().length);
         for (TokenType t : tokens) {

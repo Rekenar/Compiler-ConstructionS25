@@ -1,0 +1,32 @@
+DatePair <↑diff>
+(. Date d1, d2; int diff; .)
+= LocalDate <↑d1> "," LocalDate <↑d2>
+(. diff = Math.abs(ChronoUnit.DAYS.between(d1, d2));
+   System.out.println(diff); .)
+.
+
+LocalDate <↑d>
+(. int year, month, day; .)
+= Years <↑year> "-" Months <↑month> "-" Days <↑day>
+(. d = Date.of(year, month, day); .)
+.
+
+Years <↑year>
+(. int year; .)
+= digit (. year = digit.value * 1000; .)
+  digit (. year += digit.value * 100; .)
+  digit (. year += digit.value * 10; .)
+  digit (. year += digit.value; .)
+.
+
+Months <↑month>
+(. int month; .)
+= digit (. month = digit.value; .)
+  [ digit (. month = month * 10 + digit.value; .) ]
+.
+
+Days <↑day>
+(. int day; .)
+= digit (. day = digit.value; .)
+  [ digit (. day = day * 10 + digit.value; .) ]
+.
