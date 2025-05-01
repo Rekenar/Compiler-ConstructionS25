@@ -1,0 +1,18 @@
+program Test
+int G1, G2;                // global variables
+
+{                          // start of program body
+  // a two-parameter method with two locals
+  void foo(int a, char b)
+    int x, y;
+  {
+    // (no statements)
+  }
+
+  // the main method
+  void main()
+    char z;
+  {
+    // (no statements)
+  }
+}
