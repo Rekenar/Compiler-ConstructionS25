@@ -1,0 +1,21 @@
+program minimalTask4
+    // Class Definition for Dataset
+    class Dataset {
+        int[] val;
+        int min;
+    }
+    Dataset obj;
+{
+
+    void main()
+
+        int n;
+
+    {
+        n = 3;
+        obj = new Dataset;
+        obj.val = new int[10];
+        obj.val[0] = n;
+
+    }
+}
